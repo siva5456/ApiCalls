@@ -42,35 +42,37 @@ const DetailsScreen = ({ navigation }) => {
 
     // API Call With js then and cath blcoks
 
-   /* useEffect(() => {
-        setLodaing(true);
-
-        // console.log("executed first");
-        fetch("https://api.nationalize.io/?name=nathaniel")
-            .then((res) => { return res.json() })
-            .then((data) => {
-                setCountries(data.country)
-                // ,console.log(data),console.log("middle")
-                setLodaing(false);
-
-            })
-            .catch((e) => {
-                console.log(e);
-                setErr("data not found")
-
-                setLodaing(false);
-
-            })
-        // console.log("executed last");
-    }, [])
-    // console.log("---------------------------------------------------");
-    */
+    /* useEffect(() => {
+         setLodaing(true);
+ 
+         // console.log("executed first");
+         fetch("https://api.nationalize.io/?name=nathaniel")
+             .then((res) => { return res.json() })
+             .then((data) => {
+                 setCountries(data.country)
+                 // ,console.log(data),console.log("middle")
+                 setLodaing(false);
+ 
+             })
+             .catch((e) => {
+                 console.log(e);
+                 setErr("data not found")
+ 
+                 setLodaing(false);
+ 
+             })
+         // console.log("executed last");
+     }, [])
+     // console.log("---------------------------------------------------");
+     */
 
 
     // API Call With axios
     useEffect(() => {
-
+        setErr(null)
+        setCountries(null)
         setLodaing(true)
+
         async function data() {
             try {
                 const { data: { country } } = await axios.get("https://api.nationalize.io/?name=nathaniel")
@@ -81,7 +83,11 @@ const DetailsScreen = ({ navigation }) => {
                 // console.log(country);
             } catch (e) {
                 console.log(e);
-                setErr("data not found")
+                setTimeout(() => {
+                    setLodaing(false)
+                    setErr("Data not found")
+
+                }, 2000)
             }
         }
         data()
@@ -101,13 +107,23 @@ const DetailsScreen = ({ navigation }) => {
             paddingBottom: 100,
         }}>
             {
-                lodaing && <View tyle={{
-                    backgroundColor: "palevioletred",
-                    marginTop: 30,
+                lodaing && <View style={{
+                    // marginTop: 30,
                     alignItems: "center",
                     justifyContent: "center",
                 }}>
                     <ActivityIndicator size={70} color="#0000ff" />
+                </View>
+            }
+            {
+                err && !lodaing && <View style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    top: 350,
+                }}>
+                    <Text style={{ color: "white", fontSize: 22 }}>{err}</Text>
+
                 </View>
             }
             {!lodaing && <>
